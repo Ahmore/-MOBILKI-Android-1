@@ -20,6 +20,23 @@ public class LogicService extends Service {
         return n1 + n2;
     }
 
+    public double sub(double n1, double n2) {
+        return n1 - n2;
+    }
+
+    public double mul(double n1, double n2) {
+        return n1 + n2;
+    }
+
+    public double div(double n1, double n2) {
+        return n1 / n2;
+    }
+
+    public double pi() {
+        // TODO: Count PI
+        return 3.14159;
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
