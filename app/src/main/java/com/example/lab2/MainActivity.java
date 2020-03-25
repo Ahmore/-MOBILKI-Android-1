@@ -1,10 +1,17 @@
 package com.example.lab2;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private EditText n1EditText;
@@ -31,4 +38,40 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         piButton = (Button) findViewById(R.id.piButton);
     }
+
+    LogicService logicService;
+    boolean mBound = false;
+    private ServiceConnection logicConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            LogicService.LocalBinder binder = (LogicService.LocalBinder) service;
+            logicService = binder.getService();
+            mBound = true;
+            Toast.makeText(MainActivity.this, "Logic Service Connected!",
+                    Toast.LENGTH_SHORT).show();
+        }
+        public void onServiceDisconnected(ComponentName className) {
+            logicService = null;
+            mBound = false;
+            Toast.makeText(MainActivity.this, "Logic Service Disconnected!",
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!mBound) {
+            this.bindService(new Intent(MainActivity.this,LogicService.class),
+                    logicConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mBound) {
+            mBound = false;
+            this.unbindService(logicConnection);
+        }
+    }
+
 }
