@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -23,11 +24,13 @@ public class MainActivity extends AppCompatActivity {
     private Button divButton;
     private ProgressBar progressBar;
     private Button piButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Binding
         n1EditText = (EditText) findViewById(R.id.n1EditText);
         n2EditText = (EditText) findViewById(R.id.n2EditText);
         resEditText = (EditText) findViewById(R.id.resEditText);
@@ -37,6 +40,81 @@ public class MainActivity extends AppCompatActivity {
         divButton = (Button) findViewById(R.id.divButton);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         piButton = (Button) findViewById(R.id.piButton);
+
+        // Handlers
+        addButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mBound) {
+                    Double value1 = validAndGetValue(n1EditText);
+                    Double value2 = validAndGetValue(n2EditText);
+
+                    if (value1 != null && value2 != null) {
+                        double result = logicService.add(value1, value2);
+                        setResult(result);
+                    }
+                }
+            }
+        });
+
+        subButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mBound) {
+                    Double value1 = validAndGetValue(n1EditText);
+                    Double value2 = validAndGetValue(n2EditText);
+
+                    if (value1 != null && value2 != null) {
+                        double result = logicService.sub(value1, value2);
+                        setResult(result);
+                    }
+                }
+            }
+        });
+
+        mulButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mBound) {
+                    Double value1 = validAndGetValue(n1EditText);
+                    Double value2 = validAndGetValue(n2EditText);
+
+                    if (value1 != null && value2 != null) {
+                        double result = logicService.mul(value1, value2);
+                        setResult(result);
+                    }
+                }
+            }
+        });
+
+        divButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (mBound) {
+                    Double value1 = validAndGetValue(n1EditText);
+                    Double value2 = validAndGetValue(n2EditText);
+
+                    if (value1 != null && value2 != null) {
+                        double result = logicService.div(value1, value2);
+                        setResult(result);
+                    }
+                }
+            }
+        });
+
+        piButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //obsługa przycisku
+            }
+        });
+    }
+
+    private Double validAndGetValue(EditText editText) {
+        String temp = editText.getText().toString();
+        if (!"".equals(temp)){
+            return Double.parseDouble(temp);
+        }
+        return null;
+    }
+
+    private void setResult(double result) {
+        resEditText.setText(Double.toString(result));
     }
 
     LogicService logicService;
