@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
@@ -100,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
         piButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //obsługa przycisku
+                progressBar.setProgress(0);
+                new PiComputeTask().execute();
             }
         });
     }
@@ -152,4 +154,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class PiComputeTask extends AsyncTask<Void, Integer, Double> {
+        protected Double doInBackground(Void... voids) {
+            double pi=3.14159;
+
+            double x, y;
+            int k = 0;
+            int n = 1000000;
+            for (int i = 0; i < n; i++){
+                x = Math.random();
+                y = Math.random();
+                if (x*x + y*y <= 1) k++;
+
+                if (i % 100 == 0) {
+                    publishProgress(i);
+                }
+            }
+            double p=4.*k/n;
+
+            return pi;
+        }
+
+        protected void onPostExecute(Double result) {
+            n1EditText.setText(result.toString());
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
+    }
 }
