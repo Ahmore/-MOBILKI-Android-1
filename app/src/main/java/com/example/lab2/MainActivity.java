@@ -156,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
 
     private class PiComputeTask extends AsyncTask<Void, Integer, Double> {
         protected Double doInBackground(Void... voids) {
-            double pi=3.14159;
-
             double x, y;
             int k = 0;
             int n = 1000000;
@@ -170,9 +168,7 @@ public class MainActivity extends AppCompatActivity {
                     publishProgress(i);
                 }
             }
-            double p=4.*k/n;
-
-            return pi;
+            return 4.*k/n;
         }
 
         protected void onPostExecute(Double result) {
